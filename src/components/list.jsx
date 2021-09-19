@@ -7,14 +7,14 @@ import NewButton from './newbutton';
 
 const Inp = MyInput;
 
-//get list from API function
-export default function List() {
+export default function List(props) {
     const [data, setData] = useState(null);
     const [activeId, setActiveId] = useState("");
     const [activeName, setActiveName] = useState("");
     const [activeHtml, setActiveHtml] = useState("");
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+
 
     useEffect(() => {
         fetch("http://localhost:1337/list")
@@ -39,48 +39,126 @@ export default function List() {
     if (loading) return "Loading...";
     if (error) return error.message;
 
+
+
+    function createNew() {
+        var delivery = {
+            name: "New document",
+            html: ""
+        };
+
+        fetch("http://localhost:1337/create", {
+            body: JSON.stringify(delivery),
+            headers: {
+                'content-type': 'application/json'
+                },
+                method: 'POST'
+            })
+
+            .then((response) => {
+                if (response.ok) {
+                    return response.json();
+                }
+                throw response;
+            })
+            .then((data) => { ///////////////////// ->
+                /* setData(oldData => data); */
+                fetch("http://localhost:1337/list")
+                    .then((response) => {
+                        if (response.ok) {
+                            return response.json();
+                        }
+                        throw response;
+                    })
+                    .then((data) => {
+                        setData(oldData => data);
+                    })
+                    .catch((error) => {
+                        console.error("Error fetching data: ", error);
+                        setError(error);
+                    })
+                        .finally(() => {
+                        setLoading(false);
+                    });
+            })
+            .catch((error) => {
+                console.error("Error fetching data: ", error);
+                setError(error);
+            })
+                .finally(() => {
+                setLoading(false);
+                console.log("created ok")
+            });
+    }
+
+
+
+    function update() {
+        setActiveHtml(props.parentStates);
+        console.log(props.parentStates);
+        var delivery = {
+            filter: {activeId}.activeId,
+            name: {activeName}.activeName,
+            html: props.parentStates
+        };
+
+        console.log(delivery);
+
+        fetch("http://localhost:1337/update", {
+            body: JSON.stringify(delivery),
+            headers: {
+                'content-type': 'application/json'
+                },
+                method: 'POST'
+            })
+
+            .then((response) => {
+                if (response.ok) {
+                    return response.json();
+                }
+                throw response;
+            })
+            .then((data) => { ///////////////////// ->
+                fetch("http://localhost:1337/list")
+                    .then((response) => {
+                        if (response.ok) {
+                            return response.json();
+                        }
+                        throw response;
+                    })
+                    .then((data) => {
+                        setData(oldData => data);
+                    })
+                    .catch((error) => {
+                        console.error("Error fetching data: ", error);
+                        setError(error);
+                    })
+                        .finally(() => {
+                        setLoading(false);
+                    });
+            })
+            .catch((error) => {
+                console.error("Error fetching data: ", error);
+                setError(error);
+            })
+                .finally(() => {
+                setLoading(false);
+                console.log("update ok")
+            });
+    }
+
+
     //click functions
     let {Component} = React;
 
-    /* function saveButtonClicked(html) {
-        console.log(html);
-    } */
-
     function inpChange(event) {
         setActiveName(event.target.value);
-        /* setDisabled(false); */
-
-        /* if (event.target.value < 1) {
-            setDisabled(true);
-        } */
-
-        
-        
-        /* console.log("activename:");
-        console.log({activeName});
-        console.log("event.target.value:");
-        console.log(event.target.value); */
-
-        /* setActiveId(_id); // OR custom on change listener. */
-        /* var nameC = document.querySelector("texta"); */
-        
-        //setActiveName(nameC);
-        /* setActiveHtml(html); */
-        //console.log("static console.log: act clicked");
-        
-
-        /* var element = document.querySelector("trix-editor")
-        element.editor.setSelectedRange([0, 999999999999999])
-        element.editor.deleteInDirection("forward")
-        element.editor.insertHTML(html);  // is a Trix.Editor instance */
     }
 
     function liClicked(_id, name, html) {
         setActiveId(_id); // OR custom on change listener. */
         setActiveName(name);
         setActiveHtml(html);
-        //console.log("static console.log: act clicked");
-        //console.log(_id);
 
         var element = document.querySelector("trix-editor")
         element.editor.setSelectedRange([0, 999999999999999])
@@ -90,17 +168,17 @@ export default function List() {
 
     function saveButtonClicked() {
         console.log({activeName});
+        update();
     }
 
     function newButtonClicked() {
-        /* setIns("setIns: clicked act"); // OR custom on change listener. */
-        console.log("static console.log: act clicked");
-        //console.log({ins});
+        console.log("static console.log: new button clicked");
+        createNew();
 
         var element = document.querySelector("trix-editor");
         element.editor.setSelectedRange([0, 999999999999999]);
         element.editor.deleteInDirection("forward");
-        element.editor.insertHTML("<strong>Hello</strong>");  // is a Trix.Editor instance
+        element.editor.insertHTML("New document created, select it in the list above!");
     }
 
     //ul/li components

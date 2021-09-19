@@ -19,5 +19,3 @@ const SaveButton = ({
 };
 
 export default SaveButton;
-
-//har inte fullt ut förberett för en toolbar med individuella knappar, men det kommer.
