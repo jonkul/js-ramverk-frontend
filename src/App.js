@@ -1,50 +1,62 @@
 import logo from './logo.svg';
 import './App.css';
-import React from 'react';
-import MyToolBar from './components/mytoolbar';
-/* import "trix/dist/trix"; */
-import { TrixEditor } from "react-trix";
+import SaveButton from './components/savebutton';
+import NewButton from './components/newbutton';
+import List from './components/list';
+import Trix from "trix";
+import React, {useState, useEffect} from "react";
+import { ReactTrixRTEInput } from "react-trix-rte";
+/* import fetch from 'node-fetch'; */
+//import "trix/dist/trix";
+//import { TrixEditor } from "react-trix";
 
+export default function TrixEditor(props) {
+    const [html, setHtml] = useState("");
+    const [ins, setIns] = useState("");
 
-export default class App extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            text: "",
-            html: ""
-        };
+    function handleChange(event, newHtml) {
+        setHtml(newHtml); // OR custom on change listener.
+    }
+  
+    /* function saveButtonClicked() {
+        console.log({html});
     }
 
-    handleEditorReady(editor) {
-        editor.insertString("Input your text in this field!");
-    }
+    function actButtonClicked() {
+        setIns("setIns: clicked act"); // OR custom on change listener.
+        console.log("static console.log: act clicked");
+        //console.log({ins});
 
-    handleContentChange = (html, text) => {
-        this.setState({text : text});
-        this.setState({html : html});
-    };
+        var element = document.querySelector("trix-editor")
+        element.editor.setSelectedRange([0, 999999999999999])
+        element.editor.deleteInDirection("forward")
+        element.editor.insertHTML("<strong>Hello</strong>");  // is a Trix.Editor instance
+    } */
 
-    saveButtonClicked = () => {
-        console.log("text: " + this.state.text);
-        console.log("html: " + this.state.html);
-    };
-
-    render(){
-        return(
+    return (
         <div className="App">
             <header className="App-header">
-                <MyToolBar 
-                    onClick={this.saveButtonClicked}
-                    className={"save"}
-                />
+                
+                <div className="topcontrols">
+                    <List
+                    />
+                </div>
+                
                 <h1>My little React/Trix text editor</h1>
-                <img src={logo} className="App-logo" alt="logo" />
-                <TrixEditor
-                    autoFocus={true}
-                    onChange={this.handleContentChange}
-                    onEditorReady={this.handleEditorReady} />
+                
+                <img
+                    src={logo}
+                    className="App-logo"
+                    alt="logo" 
+                />
+                
+                <ReactTrixRTEInput
+                    /* trixInputRef={saveButtonClicked2} */
+                    placeholder="Input your text here!"
+                    onChange={handleChange}
+                    className="trix-editor"
+                />
             </header>
         </div>
-        );
-    }
+    )
 }

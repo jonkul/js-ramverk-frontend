@@ -1,6 +1,6 @@
 import React from "react";
 
-const MyToolBar = ({
+const NewButton = ({
     className,
     onClick
 }) => {
@@ -9,12 +9,12 @@ const MyToolBar = ({
             className={className + "-button"}
             onClick={onClick}
         >
-        <i class="fa fa-save"></i>
-        <span> Save</span>
+            <i className="fa fa-file"></i>
+            <span> New</span>
         </button>
     );
 };
 
-export default MyToolBar;
+export default NewButton;
 
 //har inte fullt ut förberett för en toolbar med individuella knappar, men det kommer.
