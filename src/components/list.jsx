@@ -1,6 +1,4 @@
 import React, { useState, useEffect } from "react";
-import { ReactTrixRTEInput } from "react-trix-rte";
-import Trix from "trix";
 import SaveButton from './savebutton';
 import MyInput from './myinput';
 import NewButton from './newbutton';
@@ -11,43 +9,49 @@ export default function List(props) {
     const [data, setData] = useState(null);
     const [activeId, setActiveId] = useState("");
     const [activeName, setActiveName] = useState("");
-    const [activeHtml, setActiveHtml] = useState("");
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
 
 
+    //FUNCTION FOR GETTING DATABASE DOCS
+    const fetchData = () => {
+        fetch("https://jsramverk-editor-joku17.azurewebsites.net/list")
+                .then((response) => {
+                    if (response.ok) {
+                        return response.json();
+                    }
+                    throw response;
+                })
+                .then((data) => {
+                    setData(oldData => data);
+                })
+                .catch((error) => {
+                    console.error("Error fetching data: ", error);
+                    setError(oldError => error);
+                })
+                    .finally(() => {
+                    setLoading(oldLoading => false);
+                });
+        };
+
+
+    //GET DATABASE DOCS
     useEffect(() => {
-        fetch("http://localhost:1337/list")
-            .then((response) => {
-                if (response.ok) {
-                    return response.json();
-                }
-                throw response;
-            })
-            .then((data) => {
-                setData(oldData => data);
-            })
-            .catch((error) => {
-                console.error("Error fetching data: ", error);
-                setError(error);
-            })
-                .finally(() => {
-                setLoading(false);
-            });
+        fetchData();
     }, []);
 
     if (loading) return "Loading...";
     if (error) return error.message;
 
 
-
+    //CREATE DATABASE DOC
     function createNew() {
         var delivery = {
             name: "New document",
             html: ""
         };
 
-        fetch("http://localhost:1337/create", {
+        fetch("https://jsramverk-editor-joku17.azurewebsites.net/create", {
             body: JSON.stringify(delivery),
             headers: {
                 'content-type': 'application/json'
@@ -61,25 +65,9 @@ export default function List(props) {
                 }
                 throw response;
             })
-            .then((data) => { ///////////////////// ->
-                /* setData(oldData => data); */
-                fetch("http://localhost:1337/list")
-                    .then((response) => {
-                        if (response.ok) {
-                            return response.json();
-                        }
-                        throw response;
-                    })
-                    .then((data) => {
-                        setData(oldData => data);
-                    })
-                    .catch((error) => {
-                        console.error("Error fetching data: ", error);
-                        setError(error);
-                    })
-                        .finally(() => {
-                        setLoading(false);
-                    });
+            .then((data) => {
+                //GET DATABASE DOCS
+                fetchData();
             })
             .catch((error) => {
                 console.error("Error fetching data: ", error);
@@ -92,9 +80,8 @@ export default function List(props) {
     }
 
 
-
+    //UPDATE DATABASE DOC
     function update() {
-        setActiveHtml(props.parentStates);
         console.log(props.parentStates);
         var delivery = {
             filter: {activeId}.activeId,
@@ -104,38 +91,22 @@ export default function List(props) {
 
         console.log(delivery);
 
-        fetch("http://localhost:1337/update", {
+        fetch("https://jsramverk-editor-joku17.azurewebsites.net/update", {
             body: JSON.stringify(delivery),
             headers: {
                 'content-type': 'application/json'
                 },
                 method: 'POST'
             })
-
             .then((response) => {
                 if (response.ok) {
                     return response.json();
                 }
                 throw response;
             })
-            .then((data) => { ///////////////////// ->
-                fetch("http://localhost:1337/list")
-                    .then((response) => {
-                        if (response.ok) {
-                            return response.json();
-                        }
-                        throw response;
-                    })
-                    .then((data) => {
-                        setData(oldData => data);
-                    })
-                    .catch((error) => {
-                        console.error("Error fetching data: ", error);
-                        setError(error);
-                    })
-                        .finally(() => {
-                        setLoading(false);
-                    });
+            .then((data) => {
+                //GET DATABASE DOCS
+                fetchData();
             })
             .catch((error) => {
                 console.error("Error fetching data: ", error);
@@ -148,17 +119,18 @@ export default function List(props) {
     }
 
 
-    //click functions
-    let {Component} = React;
-
+    //change handlers
     function inpChange(event) {
         setActiveName(event.target.value);
     }
 
+
+    //click functions
+    let {Component} = React;
+
     function liClicked(_id, name, html) {
         setActiveId(_id); // OR custom on change listener. */
         setActiveName(name);
-        setActiveHtml(html);
 
         var element = document.querySelector("trix-editor")
         element.editor.setSelectedRange([0, 999999999999999])
@@ -181,15 +153,17 @@ export default function List(props) {
         element.editor.insertHTML("New document created, select it in the list above!");
     }
 
+
     //ul/li components
     class Ul extends Component {
         render() {
             return (
-                <ul key="ul">
-                    {data.data.map(item => <Li
-                        options={item}
+                <ul>
+                    {data.data.map(item => <Li 
+                        key={item._id}
+                        item={item}
                         onClick={() => liClicked(item._id, item.name, item.html)}
-                        />,
+                        />
                     )}
                 </ul>
             );
@@ -198,13 +172,11 @@ export default function List(props) {
 
     class Li extends Component {
         render() {
-             let {name} = this.props.options
             return (
                 <li
-                    key="li"
                     onClick={this.props.onClick}
                 >
-                    {name}
+                    {this.props.item.name}
                 </li>
             );
         }
@@ -237,6 +209,3 @@ export default function List(props) {
         </>
     );
 }
-
-
-//

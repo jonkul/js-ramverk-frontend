@@ -23,8 +23,3 @@ const MyInput = ({
 };
 
 export default MyInput;
-
-//har inte fullt ut förberett för en toolbar med individuella knappar, men det kommer.
-
-
-

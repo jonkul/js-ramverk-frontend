@@ -4,7 +4,7 @@ import List from './components/list';
 import React, {useState} from "react";
 import { ReactTrixRTEInput } from "react-trix-rte";
 
-export default function TrixEditor(props) {
+export default function App(props) {
     const [html, setHtml] = useState("");
 
     function handleChange(event, newHtml) {

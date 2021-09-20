@@ -16,5 +16,3 @@ const NewButton = ({
 };
 
 export default NewButton;
-
-//har inte fullt ut förberett för en toolbar med individuella knappar, men det kommer.
