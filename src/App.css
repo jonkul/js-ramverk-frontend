@@ -41,7 +41,7 @@
 }
 
 /* button disabled */
-.save-button-true, .new-button-true {
+.save-button-true, .new-button-true, .reset-button-true {
   background-color: gray; /* Blue background */
   border: none; /* Remove borders */
   color: white; /* White text */
@@ -52,7 +52,7 @@
 }
 
 /* button enabled */
-.save-button-false, .new-button {
+.save-button-false, .new-button, .reset-button {
   background-color: DodgerBlue; /* Blue background */
   border: none; /* Remove borders */
   color: white; /* White text */
@@ -62,7 +62,7 @@
   margin: 1px;
 }
 
-.save-button-false:hover, .new-button:hover {
+.save-button-false:hover, .new-button:hover, .reset-button:hover {
   background-color: RoyalBlue;
 }
 

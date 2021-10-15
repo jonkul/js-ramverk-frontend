@@ -2,37 +2,64 @@ import React, { useState, useEffect } from "react";
 import SaveButton from './savebutton';
 import MyInput from './myinput';
 import NewButton from './newbutton';
+import ResetButton from './resetbutton';
 
 const Inp = MyInput;
 
+const datadef = {data: [{_id: "123", name: 'Dokument1', html: 'Placeholder1'}, {_id: "234", name: 'Dokument2', html: 'Placeholder2'}, {_id: "345", name: 'Dokument3', html: 'Placeholder3'}]};
+
 export default function List(props) {
-    const [data, setData] = useState(null);
+    const [data, setData] = useState(datadef);
     const [activeId, setActiveId] = useState("");
     const [activeName, setActiveName] = useState("");
+    // eslint-disable-next-line
     const [loading, setLoading] = useState(true);
+    // eslint-disable-next-line
     const [error, setError] = useState(null);
 
 
     //FUNCTION FOR GETTING DATABASE DOCS
     const fetchData = () => {
         fetch("https://jsramverk-editor-joku17.azurewebsites.net/list")
-                .then((response) => {
-                    if (response.ok) {
-                        return response.json();
-                    }
-                    throw response;
-                })
-                .then((data) => {
-                    setData(oldData => data);
-                })
-                .catch((error) => {
-                    console.error("Error fetching data: ", error);
-                    setError(oldError => error);
-                })
-                    .finally(() => {
-                    setLoading(oldLoading => false);
-                });
-        };
+            .then((response) => {
+                if (response.ok) {
+                    return response.json();
+                }
+                throw response;
+            })
+            .then((data) => {
+                setData(oldData => data);
+            })
+            .catch((error) => {
+                console.error("Error fetching data: ", error);
+                setError(oldError => error);
+            })
+                .finally(() => {
+                setLoading(oldLoading => false);
+            });
+    };
+
+
+    //FUNCTION FOR RESETING DATABASE
+    const setupDB = () => {
+        fetch("https://jsramverk-editor-joku17.azurewebsites.net/setup")
+            .then((response) => {
+                if (response.ok) {
+                    return response.json();
+                }
+                throw response;
+            })
+            .then((data) => {
+                setData(oldData => data);
+            })
+            .catch((error) => {
+                console.error("Error fetching data: ", error);
+                setError(oldError => error);
+            })
+                .finally(() => {
+                setLoading(oldLoading => false);
+            });
+    };
 
 
     //GET DATABASE DOCS
@@ -40,8 +67,8 @@ export default function List(props) {
         fetchData();
     }, []);
 
-    if (loading) return "Loading...";
-    if (error) return error.message;
+    /* if (loading) return "Loading..."; */
+    /* if (error) return error.message; */
 
 
     //CREATE DATABASE DOC
@@ -143,6 +170,12 @@ export default function List(props) {
         update();
     }
 
+    function resetButtonClicked() {
+        console.log("reset db button clicked");
+        setData(datadef);
+        setupDB();
+    }
+
     function newButtonClicked() {
         console.log("static console.log: new button clicked");
         createNew();
@@ -152,6 +185,8 @@ export default function List(props) {
         element.editor.deleteInDirection("forward");
         element.editor.insertHTML("New document created, select it in the list above!");
     }
+
+/* console.log({data}); */
 
 
     //ul/li components
@@ -195,6 +230,10 @@ export default function List(props) {
                         className={"save"}
                         disabled={!activeId}
                     />
+                    <ResetButton
+                        onClick={resetButtonClicked}
+                        className={"reset"}
+                    />
                     <Inp
                         key="texta"
                         value={activeName}
@@ -203,6 +242,7 @@ export default function List(props) {
                     </Inp>
                     <h3 id="dokument">Dokument:</h3>
                     <Ul
+                        data={data}
                     />
                 </div>
             </div>
