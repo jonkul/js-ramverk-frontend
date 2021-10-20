@@ -14,25 +14,25 @@ export default function App(props) {
     return (
         <div className="App">
             <header className="App-header">
+                <div id="head">
+                    <img
+                        src={logo}
+                        className="App-logo"
+                        alt="logo" 
+                    />
+                    <h1>My little React/Trix text editor</h1>
+                </div>
                 
                 <div className="topcontrols">
                     <List
                         parentStates={html}
                     />
                 </div>
-                
-                <h1>My little React/Trix text editor</h1>
-                
-                <img
-                    src={logo}
-                    className="App-logo"
-                    alt="logo" 
-                />
-                
                 <ReactTrixRTEInput
+                    id="trix-editor"
                     placeholder="Input your text here!"
                     onChange={handleChange}
-                    className="trix-editor"
+                    className="trix-editor-class"
                 />
             </header>
         </div>

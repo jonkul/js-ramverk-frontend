@@ -7,6 +7,7 @@ const NewButton = ({
     return (
         <button 
             className={className + "-button"}
+            data-testid="newbutton"
             onClick={onClick}
         >
             <i className="fa fa-file"></i>

@@ -13,7 +13,7 @@ const MyInput = ({
                 key="texta"
                 id="texta"
                 rows="1"
-                placeholder="Create or open a document!"
+                placeholder="Create new doc above, or open from the list"
                 value={value}
                 onChange={onChange}
             >

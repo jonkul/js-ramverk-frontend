@@ -8,6 +8,7 @@ const ResetButton = ({
         <button 
             className={className + "-button"}
             onClick={onClick}
+            data-testid="resetbutton"
         >
             <i className="fa fa-database"></i>
             <span> Reset DB</span>

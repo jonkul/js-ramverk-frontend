@@ -18,16 +18,52 @@ export default function List(props) {
     const [error, setError] = useState(null);
 
 
+    
+
+    //GET DATABASE DOCS
+    /* useEffect(() => {
+        fetchData();
+        sleep(300);
+    }); */
+
+
+    /* if (loading) return "Loading..."; */
+    /* if (error) return error.message; */
+
+
+
+    //FUNCTION FOR GETTING DATABASE DOCS
+    useEffect(() => {
+        let active = true;
+
+        const fetchData2 = async () => {
+            const response = await fetch("https://jsramverk-editor-joku17.azurewebsites.net/list");
+            const newData = await response.json();
+            if (active) {
+                setData(newData);
+            }
+        };
+
+        //call it
+        fetchData2();
+            return () => {
+                active = false;
+            };
+    }, []);
+
+
     //FUNCTION FOR GETTING DATABASE DOCS
     const fetchData = () => {
         fetch("https://jsramverk-editor-joku17.azurewebsites.net/list")
             .then((response) => {
                 if (response.ok) {
+                    console.log(response);
                     return response.json();
                 }
                 throw response;
             })
             .then((data) => {
+                //sleep(300);
                 setData(oldData => data);
             })
             .catch((error) => {
@@ -35,9 +71,11 @@ export default function List(props) {
                 setError(oldError => error);
             })
                 .finally(() => {
-                setLoading(oldLoading => false);
+                //setLoading(oldLoading => false);
+                //console.log("data fetched");
             });
     };
+
 
 
     //FUNCTION FOR RESETING DATABASE
@@ -50,25 +88,17 @@ export default function List(props) {
                 throw response;
             })
             .then((data) => {
-                setData(oldData => data);
+                //GET DATABASE DOCS
+                //fetchData();
             })
             .catch((error) => {
                 console.error("Error fetching data: ", error);
                 setError(oldError => error);
             })
-                .finally(() => {
-                setLoading(oldLoading => false);
-            });
+                /* .finally(() => {
+                //setLoading(oldLoading => false);
+            }) */;
     };
-
-
-    //GET DATABASE DOCS
-    useEffect(() => {
-        fetchData();
-    }, []);
-
-    /* if (loading) return "Loading..."; */
-    /* if (error) return error.message; */
 
 
     //CREATE DATABASE DOC
@@ -101,9 +131,9 @@ export default function List(props) {
                 setError(error);
             })
                 .finally(() => {
-                setLoading(false);
+                //setLoading(false);
                 console.log("created ok")
-            });
+            }) ;
     }
 
 
@@ -140,11 +170,14 @@ export default function List(props) {
                 setError(error);
             })
                 .finally(() => {
-                setLoading(false);
+                /* setLoading(false); */
                 console.log("update ok")
             });
     }
 
+    function sleep(ms) {
+        return new Promise(resolve => setTimeout(resolve, ms));
+    }
 
     //change handlers
     function inpChange(event) {
@@ -155,35 +188,54 @@ export default function List(props) {
     //click functions
     let {Component} = React;
 
-    function liClicked(_id, name, html) {
+    async function liClicked(_id, name, html) {
+        //var element = document.querySelector("trix-editor")
+        //var elementid = document.getElementById("trix-editor-id");
+        //console.log(element);
+        //console.log(elementid);
+
         setActiveId(_id); // OR custom on change listener. */
         setActiveName(name);
+
+        await sleep(300);
 
         var element = document.querySelector("trix-editor")
         element.editor.setSelectedRange([0, 999999999999999])
         element.editor.deleteInDirection("forward")
         element.editor.insertHTML(html);  // is a Trix.Editor instance
+        console.log(element);
+
+        //elementid.value = (html);
     }
 
-    function saveButtonClicked() {
+    async function saveButtonClicked() {
         console.log({activeName});
         update();
+        await sleep(300);
     }
 
-    function resetButtonClicked() {
+    async function resetButtonClicked() {
         console.log("reset db button clicked");
-        setData(datadef);
+        // setData(datadef);
         setupDB();
+        await sleep(300);
+        window.location.reload(false);
     }
 
-    function newButtonClicked() {
+    async function newButtonClicked() {
+        // var elementid = document.getElementById("trix-editor-id");
+
         console.log("static console.log: new button clicked");
         createNew();
+
+        await sleep(200);
 
         var element = document.querySelector("trix-editor");
         element.editor.setSelectedRange([0, 999999999999999]);
         element.editor.deleteInDirection("forward");
         element.editor.insertHTML("New document created, select it in the list above!");
+
+        //elementid.value = ("New document created, select it in the list above!");
     }
 
 /* console.log({data}); */
@@ -193,9 +245,11 @@ export default function List(props) {
     class Ul extends Component {
         render() {
             return (
-                <ul>
-                    {data.data.map(item => <Li 
+                <ul data-testid="myul">
+                    {data?.data && data.data.map(item => <Li 
                         key={item._id}
+                        id={item.name}
+                        className={item.name}
                         item={item}
                         onClick={() => liClicked(item._id, item.name, item.html)}
                         />
@@ -208,7 +262,7 @@ export default function List(props) {
     class Li extends Component {
         render() {
             return (
-                <li
+                <li data-testid={this.props.item.name}
                     onClick={this.props.onClick}
                 >
                     {this.props.item.name}
@@ -219,7 +273,7 @@ export default function List(props) {
 
     return (
         <>
-            <div key="div">
+            <div id="listdiv" key="div">
                 <div key="div3">
                     <NewButton
                         onClick={newButtonClicked}
@@ -240,6 +294,8 @@ export default function List(props) {
                         onChange={inpChange}
                     >
                     </Inp>
+                </div>
+                <div key="div4">
                     <h3 id="dokument">Dokument:</h3>
                     <Ul
                         data={data}

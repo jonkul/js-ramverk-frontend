@@ -1,125 +1,147 @@
-import { render, screen } from '@testing-library/react';
+/* import { render, screen } from '@testing-library/react'; */
 import React from 'react';
 import App from './App';
 import List from './components/list';
-import { shallow, mount } from 'enzyme';
+import { mount, configure } from "enzyme";
+import Adapter from "enzyme-adapter-react-16";
 import renderer from "react-test-renderer";
+import {
+  fireEvent, 
+  render,
+  screen,
+  cleanup,
+  waitFor,
+  act
+} from "@testing-library/react";
+import { ReactTrixRTEInput } from "react-trix-rte";
+import NewButton from './components/newbutton';
 
 const flushPromises = require('flush-promises');
 
+//const { act } = renderer;
 
-test("Test 1", () => {
-  const component = renderer.create(
-    <App />
-  );
+configure({ adapter: new Adapter() });
 
-  let tree = component.toJSON();
-  /* expect(tree).toMatchSnapshot(); */
+function sleep(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+afterEach(cleanup);
+
+
+it('Create new document and find it', async () => {
+    const component = mount(
+        <App
+        />
+    );
+
+    console.log(component);
+
+    await act(async () => {
+        await Promise.resolve(component);
+        await new Promise(resolve => setImmediate(resolve));
+        component.update();
+    });
+
+    await act(async () => {
+        console.log(component.debug());
+    });
+
+    /* await act(async () => {
+        sleep(300);
+    });
+
+    await waitFor(() => {
+        expect(component.find('li')).toHaveLength(3);
+    });
+
+    await act(async () => {
+        console.log(component.debug());
+    });
+
+    act(() => {
+        component.find('NewButton').simulate('click');
+    });
+
+    await act(async () => {
+        await Promise.resolve(component);
+        await new Promise(resolve => setImmediate(resolve));
+        component.update();
+    });
+
+    await waitFor(() => {
+        expect(component.find('li')).toHaveLength(4);
+    }); */
 });
 
 
-describe('Async Promise Test Suite', () => {
 
-    it('A test involving flushPromises', async () => {
-        const wrapper = mount(<List/>);
-        await flushPromises();
-        wrapper.update()
-        expect(wrapper.find('h3')).toHaveLength(1);
+//for producing snapshots
+/* test("Expect tree to match snapshot", async () => {
+    const component = renderer.create(
+        <App />
+    );
+
+    let tree = component.toJSON();
+    expect(tree).toMatchSnapshot();
+}); */
+///////////
+
+
+ //for producing snapshots
+/* test("Manage to reset the db and then find the 3 default docs", async () => {
+    const { getByTestId, getByDisplayValue } = render(<App />);
+
+    act(() => {
+        fireEvent.click(getByTestId('resetbutton'));
     });
 
-    let wrapper;
-
-    it('Will not work correctly without flushing promises', async () => {
-        let a;
-        let b;
-
-        Promise.resolve().then(() => {
-            wrapper = mount(<App />);
-        }).then(() => {
-            b = 2;
-        })
-
-        await flushPromises();
-
-        expect(wrapper.find('h3')).toHaveLength(1);
-        expect(b).toBe(2);
-        const linkElement2 = screen.getByText('');
-        expect(linkElement2).toBeInTheDocument();
-
+    await waitFor(() => {
+        expect(getByTestId('myul')).toHaveTextContent("Dokument1");
     });
 
-});
-
-
-
-
-/* describe('When rendering Parent', () => {
-    var parent;
-
-    beforeAll(() => {
-        parent = mount(<App />)
+    await waitFor(() => {
+        expect(getByTestId('myul')).toHaveTextContent("Dokument2");
     });
 
-    it('should display Child with response of the service', () => {
-        expect.assertions(1);
-
-        return List().then( () => {
-            expect(parent.find('h3')).toHaveLength(1);
-        });
-    });
-});
- */
-
-
-
-
-/* const flushPromises = () => new Promise(setImmediate);
-
-let wrapper;
-
-beforeEach(() => {
-    wrapper = mount(<App />);
-});
-
-describe('<App /> rendering', () => {
-    it('should render one <h1>', () => {
-        expect(wrapper.find('h1')).toHaveLength(1);
+    await waitFor(() => {
+        expect(getByTestId('myul')).toHaveTextContent("Dokument3");
     });
 
-    it('should render one <h3>', () => {
-        expect(wrapper.find('h3')).toHaveLength(1);
-    });
-
-    it('should render one <h3>', async () => {
-        const wrapperb = mount(<App />);
-        await flushPromises();
-        wrapperb.update();
-        expect(wrapperb.find('h3')).toHaveLength(1);
-    });
-
-    it('should render one <img>', () => {
-        expect(wrapper.find('img')).toHaveLength(1);
+    act(() => {
+        fireEvent.click(getByTestId('resetbutton'));
     });
 }); */
+///////////
 
 
 
-/* 
-  test('renders learn react link', () => {
-  render(<App />);
-  const linkElement = screen.getByText(/My little React/i);
-  expect(linkElement).toBeInTheDocument();
-});
+//for producing snapshots
+/* test("Manage to create a new document and find it", async () => {
+    const { getByTestId, getByDisplayValue } = render(<App />);
 
-test('renders the top controls', async () => {
-  await render(<App />);
-  const linkElement2 = screen.getByText('Loading...');
-  expect(linkElement2).toBeInTheDocument();
-});
+    act(() => {
+        fireEvent.click(getByTestId('newbutton'));
+    });
 
-test('renders the top controls, 2', async () => {
-  await render(<App />);
-  const linkElement2 = screen.getByText('Active');
-  expect(linkElement2).toBeInTheDocument();
-});
- */
+    await waitFor(() => {
+        expect(getByTestId('myul')).toHaveTextContent("Dokument1");
+    });
+
+    await waitFor(() => {
+        expect(getByTestId('myul')).toHaveTextContent("Dokument2");
+    });
+
+    await waitFor(() => {
+        expect(getByTestId('myul')).toHaveTextContent("Dokument3");
+    });
+
+    await waitFor(() => {
+        expect(getByTestId('myul')).toHaveTextContent("New document");
+    });
+
+    act(() => {
+        fireEvent.click(getByTestId('resetbutton'));
+    });
+///////////
+}); */
