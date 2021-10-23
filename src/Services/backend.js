@@ -1,36 +1,15 @@
-//FUNCTION FOR GETTING DATABASE DOCS
+//GET DATABASE DOCS
 const fetchData = () => {
     return fetch("https://jsramverk-editor-joku17.azurewebsites.net/list")
-        .then(response => response.json())
-        /* .then((data) => {
-            return data;
-        })
-        .catch((error) => {
-            console.error("Error fetching data: ", error);
-            throw error;
-        }); */
+        .then(response => response.json());
 };
 
 
-//FUNCTION FOR RESETING DATABASE
+//RESET DATABASE
 const setupDB = () => {
     fetch("https://jsramverk-editor-joku17.azurewebsites.net/setup")
-        .then((response) => {
-            if (response.ok) {
-                return response.json();
-            }
-            throw response;
-        })
-        .then((data) => {
-            //GET DATABASE DOCS
-            fetchData();
-        })
-        .catch((error) => {
-            console.error("Error fetching data: ", error);
-        })
-            .finally(() => {
-
-        });
+        .then(response => response.json())
+        .finally(fetchData());
 };
 
 
@@ -48,36 +27,18 @@ function createNew() {
             },
             method: 'POST'
         })
-
-        .then((response) => {
-            if (response.ok) {
-                return response.json();
-            }
-            throw response;
-        })
-        .then((data) => {
-            //GET DATABASE DOCS
-            fetchData();
-        })
-        .catch((error) => {
-            console.error("Error fetching data: ", error);
-        })
-            .finally(() => {
-            console.log("created ok");
-        });
+        .then(response => response.json())
+        .then(fetchData());
 }
 
 
 //UPDATE DATABASE DOC
-function update(activeId, activeName, parentStates) {
-    /* console.log(props.parentStates); */
+function update(activeId, activeName, activeHTML) {
     var delivery = {
         filter: {activeId}.activeId,
         name: {activeName}.activeName,
-        html: parentStates
+        html: {activeHTML}.activeHTML,
     };
-
-    console.log(delivery);
 
     fetch("https://jsramverk-editor-joku17.azurewebsites.net/update", {
         body: JSON.stringify(delivery),
@@ -86,24 +47,39 @@ function update(activeId, activeName, parentStates) {
             },
             method: 'POST'
         })
-        .then((response) => {
-            if (response.ok) {
-                return response.json();
+        .then(response => response.json())
+        .finally(fetchData());
+}
+
+
+export { update, createNew, setupDB, fetchData };
+
+
+
+/* //FUNCTION FOR GETTING DATABASE DOCS
+    useEffect(() => {
+        let active = true;
+
+        const fetchedData = async () => {
+            const response = await fetchData();
+            if (active) {
+                setData(response.data);
             }
-            throw response;
-        })
-        .then((data) => {
-            //GET DATABASE DOCS
-            fetchData();
+        };
+
+        //call it
+        fetchedData();
+            return () => {
+                active = false;
+            };
+    }, []); */
+
+
+
+/* .then((data) => {
+            return data;
         })
         .catch((error) => {
             console.error("Error fetching data: ", error);
             throw error;
-        })
-            .finally(() => {
-            console.log("update ok");
-        });
-}
-
-
-export {update, createNew, setupDB, fetchData};
+        }); */

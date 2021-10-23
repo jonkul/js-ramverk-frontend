@@ -177,3 +177,18 @@ test('renders the top controls, 2', async () => {
   expect(linkElement2).toBeInTheDocument();
 });
  */
+
+
+
+
+
+
+
+//const datadef = {data: [{_id: "123", name: 'Dokument1', html: 'Placeholder1'}, {_id: "234", name: 'Dokument2', html: 'Placeholder2'}, {_id: "345", name: 'Dokument3', html: 'Placeholder3'}]};
+    /* const [liClicked, setLiClicked] = useState({
+        _id: "",
+        name: "",
+        html: ""
+    }); */
+
+    //console.log({liClicked});

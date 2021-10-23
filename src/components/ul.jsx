@@ -1,30 +1,26 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 
-let {Component} = React;
-const data = [{"id": "1","name": "Bill"}, {"id": "2","name": "Sarah"}]
-
-class Child extends Component {
-  render() {
-    let {name} = this.props;
-    return <li>{name}</li>
-  }
+function ListItem(props) {
+    return (<li
+                onClick={() => props.onClick(props._id, props.name, props.html)}
+            >
+                {props.name}
+            </li>);
 }
 
-class Parent extends Component {
-  render() {
+export default function Ul(props) {
+    const data = props.data;
     return (
-        <div>
-          <h1>{"Group 1"}</h1>
-          <ul>{this.props.data.map(item => {
-                return <Child key={item.id} {...item} />
-              })}
-          </ul>
-        </div>
+        <ul>
+            {data.map((mapped) =>
+                <ListItem
+                    key={mapped.name}
+                    _id={mapped._id}
+                    html={mapped.html}
+                    name={mapped.name}
+                    onClick={props.onClick}
+                />
+            )}
+        </ul>
     );
-  }
 }
-
-ReactDOM.render(
-  <Parent data={data} />,
-  document.getElementById('app')
-);
