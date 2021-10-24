@@ -8,7 +8,7 @@ import NewButton from './components/newbutton';
 import ResetButton from './components/resetbutton';
 import React, { useState, useEffect } from "react";
 import { ReactTrixRTEInput } from "react-trix-rte";
-import { update, createNew, setupDB, fetchData } from './services/backend';
+import { update, createNew, setupDB, fetchData } from './functions/backend';
 
 export default function App(props) {
     const [data, setData] = useState([]);
