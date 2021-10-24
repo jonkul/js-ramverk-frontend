@@ -412,3 +412,36 @@ import userEvent from '@testing-library/user-event'; */
   waitFor,
   act
 } from "@testing-library/react"; */
+
+
+
+
+
+
+/* //FUNCTION FOR GETTING DATABASE DOCS
+    useEffect(() => {
+        let active = true;
+
+        const fetchedData = async () => {
+            const response = await fetchData();
+            if (active) {
+                setData(response.data);
+            }
+        };
+
+        //call it
+        fetchedData();
+            return () => {
+                active = false;
+            };
+    }, []); */
+
+
+
+/* .then((data) => {
+            return data;
+        })
+        .catch((error) => {
+            console.error("Error fetching data: ", error);
+            throw error;
+        }); */

@@ -53,33 +53,3 @@ function update(activeId, activeName, activeHTML) {
 
 
 export { update, createNew, setupDB, fetchData };
-
-
-
-/* //FUNCTION FOR GETTING DATABASE DOCS
-    useEffect(() => {
-        let active = true;
-
-        const fetchedData = async () => {
-            const response = await fetchData();
-            if (active) {
-                setData(response.data);
-            }
-        };
-
-        //call it
-        fetchedData();
-            return () => {
-                active = false;
-            };
-    }, []); */
-
-
-
-/* .then((data) => {
-            return data;
-        })
-        .catch((error) => {
-            console.error("Error fetching data: ", error);
-            throw error;
-        }); */
