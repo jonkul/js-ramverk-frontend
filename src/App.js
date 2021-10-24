@@ -68,7 +68,7 @@ export default function App(props) {
     function resetButtonClicked() {
         setupDB();
         fetchedData();
-        window.location.reload(false);
+        //window.location.reload(false);
     }
 
     //handle new button clicked
@@ -76,10 +76,10 @@ export default function App(props) {
         createNew();
         fetchedData();
 
-        var element = document.querySelector("trix-editor");
+        /* var element = document.querySelector("trix-editor");
         element.editor.setSelectedRange([0, 999999999999999]);
         element.editor.deleteInDirection("forward");
-        element.editor.insertHTML("New document created, select it in the list above!");
+        element.editor.insertHTML("New document created, select it in the list above!"); */
     }
 
 
@@ -96,6 +96,7 @@ export default function App(props) {
                             <NewButton
                                 onClick={newButtonClicked}
                                 className={"new"}
+                                id="NewButton"
                             />
                             <SaveButton 
                                 onClick={saveButtonClicked}

@@ -9,7 +9,25 @@ import {
 import userEvent from '@testing-library/user-event';
 
 
+function sleep(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+
+
 describe('App', () => {
+    test('clicks New button', async () => {
+        render(<App />);
+
+        //sets up for the final test
+        var mhm = await screen.findByText('New');
+        act(() => {
+            userEvent.click(mhm);
+        });
+    });
+
+
+
     test('renders App component, finds expected static elements', async () => {
         render(<App />);
 
@@ -25,23 +43,6 @@ describe('App', () => {
         render(<App />);
 
         expect(await screen.findByText('Dokument1')).toBeInTheDocument();
-        screen.debug();
-    });
-
-
-
-    test('edits "active document input", finds state driven <p> in DOM', async () => {
-        render(<App />);
-
-        expect(screen.queryByText('test input')).toBeNull();
-
-        await act(async () => {
-            fireEvent.change(screen.getByRole('textbox'), {
-                target: { value: 'test input' },
-            });
-        });
-
-        expect(await screen.findByText('test input')).toBeInTheDocument();
     });
 
 
@@ -62,7 +63,23 @@ describe('App', () => {
 
 
 
-    test('edits the "text editor", clicks save button', async () => {
+    test('edits "active document input", finds state driven <p> in DOM', async () => {
+        render(<App />);
+
+        expect(screen.queryByText('test input')).toBeNull();
+
+        await act(async () => {
+            fireEvent.change(screen.getByRole('textbox'), {
+                target: { value: 'test input' },
+            });
+        });
+
+        expect(await screen.findByText('test input')).toBeInTheDocument();
+    });
+
+
+
+    test('finds "New document"', async () => {
         render(<App />);
 
         expect(screen.queryByText('test input3')).toBeNull();
@@ -75,6 +92,23 @@ describe('App', () => {
 
         expect(await screen.findByText('test input3')).toBeInTheDocument();
 
-        await userEvent.click(screen.getByText('New'));
+        sleep(3000);
+
+        expect(await screen.findByText('New document')).toBeInTheDocument();
+        /* screen.debug(); */
+    });
+
+
+    test('clicks Reset DB button', () => {
+        render(<App />);
+
+        expect(screen.queryByText('test input3')).toBeNull();
+
+        var mhm = screen.getByText('Reset DB');
+        act(() => {
+            userEvent.click(mhm);
+        });
+
+        expect(screen.queryByText('New document')).toBeNull();
     });
 });
