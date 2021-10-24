@@ -192,3 +192,223 @@ test('renders the top controls, 2', async () => {
     }); */
 
     //console.log({liClicked});
+
+
+
+
+
+
+
+//test
+
+
+/* test('clicks the New button, finds "New document"', async () => {
+        render(<App />);
+
+        expect(await screen.findByText('Dokument1')).toBeInTheDocument();
+        //screen.debug();
+    }); */
+
+
+//expect(screen.queryByText('New document')).toBeNull();
+
+
+/* await act(async () => {
+            fireEvent.click(screen.getByText('Dokument1'));
+        }); */
+
+
+        //await userEvent.click(screen.getByText('New'));
+
+        /* await act(async () => {
+            await screen.findByText('New').simulate('click');
+        }); */
+
+        /* await act(async () => {
+            fireEvent.change(screen.getByRole('textbox'), {
+            target: { value: 'test input' },
+            });
+        }); */
+
+        //expect(await screen.findByText('test input')).toBeInTheDocument();
+
+
+
+
+//screen.debug();
+
+//for producing snapshots
+/* test("Expect tree to match snapshot", async () => {
+    const component = renderer.create(
+        <App />
+    );
+
+    let tree = component.toJSON();
+    expect(tree).toMatchSnapshot();
+}); */
+///////////
+
+
+
+
+/* act(() => {
+        screen.find('NewButton').simulate('click');
+    }); */
+ 
+    /* expect(screen.queryByText(/Signed in as/)).toBeNull();
+ 
+    expect(await screen.findByText(/Signed in as/)).toBeInTheDocument(); */
+
+
+
+
+/* it('Create new document and find it', async () => {
+    const component = mount(
+        <App
+        />
+    );
+
+    console.log(component);
+
+    await act(async () => {
+        await Promise.resolve(component);
+        await new Promise(resolve => setImmediate(resolve));
+        //component.update();
+    });
+
+    await act(async () => {
+        console.log(component.debug());
+    });
+
+    await act(async () => {
+        sleep(300);
+    });
+
+    await waitFor(() => {
+        expect(component.find('li')).toHaveLength(3);
+    });
+
+    await act(async () => {
+        console.log(component.debug());
+    });
+
+    act(() => {
+        component.find('NewButton').simulate('click');
+    });
+
+    await act(async () => {
+        await Promise.resolve(component);
+        await new Promise(resolve => setImmediate(resolve));
+        component.update();
+    });
+
+    await waitFor(() => {
+        expect(component.find('li')).toHaveLength(4);
+    }); 
+}); */
+
+
+
+
+
+
+ //for producing snapshots
+/* test("Manage to reset the db and then find the 3 default docs", async () => {
+    const { getByTestId, getByDisplayValue } = render(<App />);
+
+    act(() => {
+        fireEvent.click(getByTestId('resetbutton'));
+    });
+
+    await waitFor(() => {
+        expect(getByTestId('myul')).toHaveTextContent("Dokument1");
+    });
+
+    await waitFor(() => {
+        expect(getByTestId('myul')).toHaveTextContent("Dokument2");
+    });
+
+    await waitFor(() => {
+        expect(getByTestId('myul')).toHaveTextContent("Dokument3");
+    });
+
+    act(() => {
+        fireEvent.click(getByTestId('resetbutton'));
+    });
+}); */
+///////////
+
+
+
+//for producing snapshots
+/* test("Manage to create a new document and find it", async () => {
+    const { getById, getByDisplayValue } = render(<App />);
+
+    act(() => {
+        fireEvent.click(getById('newbutton'));
+    });
+
+    await waitFor(() => {
+        expect(getById('myul')).toHaveTextContent("Dokument1");
+    });
+
+    await waitFor(() => {
+        expect(getById('myul')).toHaveTextContent("Dokument2");
+    });
+
+    await waitFor(() => {
+        expect(getById('myul')).toHaveTextContent("Dokument3");
+    });
+
+    await waitFor(() => {
+        expect(getById('myul')).toHaveTextContent("New document");
+    });
+
+    act(() => {
+        fireEvent.click(getById('resetbutton'));
+    });
+///////////
+}); */
+
+
+
+/* describe('App', () => {
+  test('renders App component', () => {
+    render(<App />);
+ 
+    screen.debug();
+  });
+}); */
+
+
+
+
+/* const flushPromises = require('flush-promises');
+configure({ adapter: new Adapter() });
+
+function sleep(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+} */
+
+//afterEach(cleanup);
+
+
+/* import { mount, configure } from "enzyme";
+import Adapter from "enzyme-adapter-react-16";
+import renderer from "react-test-renderer";
+import userEvent from '@testing-library/user-event'; */
+
+//import List from './components/list';
+//import NewButton from './components/newbutton';
+//import { ReactTrixRTEInput } from "react-trix-rte";
+
+
+/* import {
+  fireEvent,
+  TestRenderer,
+  render,
+  screen,
+  cleanup,
+  waitFor,
+  act
+} from "@testing-library/react"; */

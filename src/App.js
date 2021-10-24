@@ -130,6 +130,20 @@ export default function App(props) {
                     onChange={handleChange}
                     className="trix-editor-class"
                 />
+
+                {/* writes out states */}
+                <div id="diagnostics">
+                    <p className="activeName state">
+                        {activeName}
+                    </p>
+                    <p className="activeId state">
+                        {activeId}
+                    </p>
+                    <p className="activeHTML state">
+                        {activeHTML}
+                    </p>
+                </div>
+
             </header>
         </div>
     )

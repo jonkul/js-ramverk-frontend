@@ -1,147 +1,80 @@
-/* import { render, screen } from '@testing-library/react'; */
 import React from 'react';
 import App from './App';
-import List from './components/list';
-import { mount, configure } from "enzyme";
-import Adapter from "enzyme-adapter-react-16";
-import renderer from "react-test-renderer";
 import {
-  fireEvent, 
+  fireEvent,
   render,
   screen,
-  cleanup,
-  waitFor,
   act
 } from "@testing-library/react";
-import { ReactTrixRTEInput } from "react-trix-rte";
-import NewButton from './components/newbutton';
-
-const flushPromises = require('flush-promises');
-
-//const { act } = renderer;
-
-configure({ adapter: new Adapter() });
-
-function sleep(ms) {
-    return new Promise(resolve => setTimeout(resolve, ms));
-}
-
-afterEach(cleanup);
+import userEvent from '@testing-library/user-event';
 
 
-it('Create new document and find it', async () => {
-    const component = mount(
-        <App
-        />
-    );
+describe('App', () => {
+    test('renders App component, finds expected static elements', async () => {
+        render(<App />);
 
-    console.log(component);
-
-    await act(async () => {
-        await Promise.resolve(component);
-        await new Promise(resolve => setImmediate(resolve));
-        component.update();
+        expect(screen.getByText('My little React/Trix text editor')).toBeInTheDocument();
+        expect(screen.getByText('Active document:')).toBeInTheDocument();
+        expect(screen.getByText('Documents:')).toBeInTheDocument();
+        expect(await screen.findByText('Dokument1')).toBeInTheDocument();
     });
 
-    await act(async () => {
-        console.log(component.debug());
+
+
+    test('renders App component, finds expected DB elements', async () => {
+        render(<App />);
+
+        expect(await screen.findByText('Dokument1')).toBeInTheDocument();
+        screen.debug();
     });
 
-    /* await act(async () => {
-        sleep(300);
+
+
+    test('edits "active document input", finds state driven <p> in DOM', async () => {
+        render(<App />);
+
+        expect(screen.queryByText('test input')).toBeNull();
+
+        await act(async () => {
+            fireEvent.change(screen.getByRole('textbox'), {
+                target: { value: 'test input' },
+            });
+        });
+
+        expect(await screen.findByText('test input')).toBeInTheDocument();
     });
 
-    await waitFor(() => {
-        expect(component.find('li')).toHaveLength(3);
+
+
+    test('edits the "text editor", finds state driven <p> in DOM', async () => {
+        render(<App />);
+
+        expect(screen.queryByText('test input2')).toBeNull();
+
+        await act(async () => {
+            fireEvent.change(screen.getByRole('textbox'), {
+                target: { value: 'test input2' },
+            });
+        });
+
+        expect(await screen.findByText('test input2')).toBeInTheDocument();
     });
 
-    await act(async () => {
-        console.log(component.debug());
-    });
 
-    act(() => {
-        component.find('NewButton').simulate('click');
-    });
 
-    await act(async () => {
-        await Promise.resolve(component);
-        await new Promise(resolve => setImmediate(resolve));
-        component.update();
-    });
+    test('edits the "text editor", clicks save button', async () => {
+        render(<App />);
 
-    await waitFor(() => {
-        expect(component.find('li')).toHaveLength(4);
-    }); */
+        expect(screen.queryByText('test input3')).toBeNull();
+
+        await act(async () => {
+            fireEvent.change(screen.getByRole('textbox'), {
+                target: { value: 'test input3' },
+            });
+        });
+
+        expect(await screen.findByText('test input3')).toBeInTheDocument();
+
+        await userEvent.click(screen.getByText('New'));
+    });
 });
-
-
-
-//for producing snapshots
-/* test("Expect tree to match snapshot", async () => {
-    const component = renderer.create(
-        <App />
-    );
-
-    let tree = component.toJSON();
-    expect(tree).toMatchSnapshot();
-}); */
-///////////
-
-
- //for producing snapshots
-/* test("Manage to reset the db and then find the 3 default docs", async () => {
-    const { getByTestId, getByDisplayValue } = render(<App />);
-
-    act(() => {
-        fireEvent.click(getByTestId('resetbutton'));
-    });
-
-    await waitFor(() => {
-        expect(getByTestId('myul')).toHaveTextContent("Dokument1");
-    });
-
-    await waitFor(() => {
-        expect(getByTestId('myul')).toHaveTextContent("Dokument2");
-    });
-
-    await waitFor(() => {
-        expect(getByTestId('myul')).toHaveTextContent("Dokument3");
-    });
-
-    act(() => {
-        fireEvent.click(getByTestId('resetbutton'));
-    });
-}); */
-///////////
-
-
-
-//for producing snapshots
-/* test("Manage to create a new document and find it", async () => {
-    const { getByTestId, getByDisplayValue } = render(<App />);
-
-    act(() => {
-        fireEvent.click(getByTestId('newbutton'));
-    });
-
-    await waitFor(() => {
-        expect(getByTestId('myul')).toHaveTextContent("Dokument1");
-    });
-
-    await waitFor(() => {
-        expect(getByTestId('myul')).toHaveTextContent("Dokument2");
-    });
-
-    await waitFor(() => {
-        expect(getByTestId('myul')).toHaveTextContent("Dokument3");
-    });
-
-    await waitFor(() => {
-        expect(getByTestId('myul')).toHaveTextContent("New document");
-    });
-
-    act(() => {
-        fireEvent.click(getByTestId('resetbutton'));
-    });
-///////////
-}); */

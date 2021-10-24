@@ -17,6 +17,11 @@
   }
 }
 
+#diagnostics {
+  font-size: 1px;
+  color: #282c34;
+}
+
 #head, #listdiv {
   display: flex;
   flex-direction: row;
